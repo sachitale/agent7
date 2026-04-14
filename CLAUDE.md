@@ -18,13 +18,34 @@ Build an AI agent with the following pipeline:
 
 Each subdirectory is an independent project. When working inside a subdirectory, treat it as the working root and follow that project's own conventions (language, dependencies, test runner, etc.).
 
-## Python Environment (root-level)
+Sub-projects use `uv` for Python environment management.
 
-The `.venv/` at the repo root is a Python 3.12 virtual environment:
+### `chunker/`
 
+Stage 1 of the pipeline: traverse a git repo (remote URL or local path), parse source files with tree-sitter AST chunking, and write chunks to JSONL.
+
+**Setup:**
 ```bash
-source .venv/bin/activate
-python main.py
+cd chunker
+uv venv --python 3.12
+uv pip install -e ".[dev]"
 ```
 
-No shared dependencies are installed yet. Sub-projects will manage their own dependencies.
+**Run:**
+```bash
+.venv/bin/chunker chunk --repo <url-or-path> --output chunks.jsonl
+.venv/bin/chunker chunk --repo . --language python --output chunks.jsonl
+```
+
+**Test:**
+```bash
+.venv/bin/pytest tests/ -v
+```
+
+**Output schema** (one JSON object per line):
+```json
+{"chunk_id": "...", "repo": "...", "file_path": "...", "language": "...",
+ "start_line": 1, "end_line": 10, "chunk_type": "function", "name": "foo", "content": "..."}
+```
+
+Supported languages: Python, JavaScript, TypeScript, Go, Java, Rust, C, C++. Unsupported file types fall back to a sliding-window chunker.

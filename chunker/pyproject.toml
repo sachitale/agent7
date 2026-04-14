@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chunker"
+version = "0.1.0"
+description = "Chunk a codebase from a git repo into semantically meaningful pieces"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.1",
+    "gitpython>=3.1",
+    "tree-sitter>=0.22",
+    "tree-sitter-python>=0.22",
+    "tree-sitter-javascript>=0.22",
+    "tree-sitter-typescript>=0.22",
+    "tree-sitter-go>=0.22",
+    "tree-sitter-java>=0.22",
+    "tree-sitter-rust>=0.22",
+    "tree-sitter-c>=0.22",
+    "tree-sitter-cpp>=0.22",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov"]
+
+[project.scripts]
+chunker = "chunker.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
