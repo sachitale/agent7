@@ -38,6 +38,7 @@ chroma/
 chunks.jsonl
 events.jsonl
 analysis.jsonl
+outputs/
 
 # Secrets / env
 .env
