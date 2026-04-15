@@ -20,9 +20,21 @@ EXTENSION_TO_LANGUAGE: dict[str, str] = {
 }
 
 SKIP_DIRS = {
-    ".git", "node_modules", "__pycache__", ".venv", "venv",
-    "dist", "build", ".mypy_cache", ".pytest_cache", ".tox",
-    "vendor", "third_party", "target"
+    # Version control
+    ".git", ".svn", ".hg",
+    # Python
+    "__pycache__", ".venv", "venv", "env", ".tox", ".mypy_cache",
+    ".pytest_cache", ".ruff_cache", ".eggs",
+    # Node
+    "node_modules",
+    # Build output
+    "dist", "build", "out", "target", "bin", "obj",
+    # Dependency vendoring
+    "vendor", "third_party",
+    # IDE
+    ".idea", ".vscode", ".eclipse", ".settings",
+    # Misc
+    ".cache", "coverage", "htmlcov",
 }
 
 SKIP_SUFFIXES = {".min.js", ".min.css", ".map", ".lock", ".sum"}
