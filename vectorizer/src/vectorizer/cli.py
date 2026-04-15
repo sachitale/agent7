@@ -55,7 +55,7 @@ def embed(
     db_path.mkdir(parents=True, exist_ok=True)
     store = VectorStore(collection_name=collection, persist_dir=db_path)
 
-    total = ingest(input_path=input_path, embedder=embedder, store=store, batch_size=batch_size)
+    total = ingest(jsonl_path=input_path, embedder=embedder, store=store, batch_size=batch_size)
 
     console.print(f"\n[green]Done.[/green] Stored [bold]{total}[/bold] chunks in collection '[bold]{collection}[/bold]' → {db_path}")
     console.print(f"Total vectors in collection: [bold]{store.count()}[/bold]")
