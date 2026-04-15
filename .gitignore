@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv
+uv.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# Vector store data
+chroma/
+*.sqlite3
+
+# Output files (generated at runtime)
+chunks.jsonl
+events.jsonl
+analysis.jsonl
+
+# Secrets / env
+.env
+.env.*
+*.pem
+*.key
+
+# macOS
+.DS_Store

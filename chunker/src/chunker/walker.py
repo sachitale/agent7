@@ -22,7 +22,7 @@ EXTENSION_TO_LANGUAGE: dict[str, str] = {
 SKIP_DIRS = {
     ".git", "node_modules", "__pycache__", ".venv", "venv",
     "dist", "build", ".mypy_cache", ".pytest_cache", ".tox",
-    "vendor", "third_party",
+    "vendor", "third_party", "target"
 }
 
 SKIP_SUFFIXES = {".min.js", ".min.css", ".map", ".lock", ".sum"}

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ingester-gcp"
+version = "0.1.0"
+description = "GCP Cloud Logging ingester"
+requires-python = ">=3.12"
+dependencies = [
+    "ingester-core",
+    "google-cloud-logging>=3.0",
+    "click>=8.1",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-mock>=3.0"]
+
+[project.scripts]
+ingester-gcp = "ingester_gcp.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]

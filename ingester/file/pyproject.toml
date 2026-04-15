@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ingester-file"
+version = "0.1.0"
+description = "Log file / stdin ingester"
+requires-python = ">=3.12"
+dependencies = [
+    "ingester-core",
+    "click>=8.1",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+ingester-file = "ingester_file.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]

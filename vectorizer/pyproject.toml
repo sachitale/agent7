@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vectorizer"
+version = "0.1.0"
+description = "Embed code chunks and store them in a vector database"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.1",
+    "chromadb>=0.5",
+    "openai>=1.0",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov", "pytest-mock>=3.0"]
+
+[project.scripts]
+vectorizer = "vectorizer.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
