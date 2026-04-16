@@ -59,6 +59,15 @@ def test_fallback_for_unsupported_language(chunker):
     assert all(c.chunk_type == "window" for c in chunks)
 
 
+def test_scala_class_and_object(chunker):
+    src = "class PaymentService {\n  def process(): Unit = {}\n}\n\nobject Main extends App {\n  println(\"hi\")\n}\n"
+    path = _tmpfile(src, ".scala")
+    chunks = chunker.chunk(path, "testrepo", "Main.scala", "scala")
+    names = [c.name for c in chunks]
+    assert "PaymentService" in names
+    assert "Main" in names
+
+
 def test_line_numbers_are_correct(chunker):
     src = "x = 1\n\ndef foo():\n    return x\n"
     path = _tmpfile(src, ".py")

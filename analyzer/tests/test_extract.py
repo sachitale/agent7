@@ -37,6 +37,11 @@ def test_detect_go():
     assert _detect_language(trace) == "go"
 
 
+def test_detect_scala():
+    trace = "\tat com.example.PaymentService.process(PaymentService.scala:42)"
+    assert _detect_language(trace) == "scala"
+
+
 def test_detect_unknown():
     assert _detect_language("something went wrong") == ""
 
