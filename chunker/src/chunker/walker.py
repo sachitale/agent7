@@ -17,6 +17,8 @@ EXTENSION_TO_LANGUAGE: dict[str, str] = {
     ".cc": "cpp",
     ".cxx": "cpp",
     ".hpp": "cpp",
+    ".scala": "scala",
+    ".sc": "scala",
 }
 
 SKIP_DIRS = {

@@ -33,6 +33,12 @@ _NODE_TYPE_MAP: dict[str, str] = {
     # C / C++
     "struct_specifier": "class",
     "class_specifier": "class",
+    # Scala
+    "class_definition": "class",
+    "object_definition": "class",
+    "trait_definition": "class",
+    "function_definition": "function",
+    "val_definition": "function",
 }
 
 # Per-language, the node types we extract at the top level
@@ -45,6 +51,7 @@ _LANGUAGE_NODE_TYPES: dict[str, set[str]] = {
     "rust": {"function_item", "impl_item", "struct_item", "enum_item"},
     "c": {"function_definition", "struct_specifier"},
     "cpp": {"function_definition", "struct_specifier", "class_specifier"},
+    "scala": {"class_definition", "object_definition", "trait_definition", "function_definition", "val_definition"},
 }
 
 _LANGUAGE_MODULE_MAP: dict[str, str] = {
@@ -56,6 +63,7 @@ _LANGUAGE_MODULE_MAP: dict[str, str] = {
     "rust": "tree_sitter_rust",
     "c": "tree_sitter_c",
     "cpp": "tree_sitter_cpp",
+    "scala": "tree_sitter_scala",
 }
 
 _PARSER_CACHE: dict[str, object] = {}

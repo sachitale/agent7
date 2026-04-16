@@ -13,6 +13,7 @@ _LANGUAGE_SIGNALS = [
     (re.compile(r'at Object\.<anonymous>|\.js:\d+|\tat .*\.ts:\d+'), "typescript"),
     (re.compile(r'\.rb:\d+|in `'), "ruby"),
     (re.compile(r'\.rs:\d+|thread .* panicked'), "rust"),
+    (re.compile(r'\tat [\w$.]+\([\w]+\.scala:\d+\)'), "scala"),
 ]
 
 
@@ -36,7 +37,7 @@ def _build_initial_queries(message: str, stack_trace: str, language: str) -> lis
     symbols: list[str] = []
     if language == "python":
         symbols = re.findall(r'in (\w+)\n', stack_trace)
-    elif language in ("java", "kotlin"):
+    elif language in ("java", "kotlin", "scala"):
         symbols = re.findall(r'at ([\w.$]+)\(', stack_trace)
         symbols = [s.split(".")[-2] for s in symbols if "." in s]  # class names
     elif language == "go":
