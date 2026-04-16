@@ -19,6 +19,17 @@ EXTENSION_TO_LANGUAGE: dict[str, str] = {
     ".hpp": "cpp",
     ".scala": "scala",
     ".sc": "scala",
+    # Config
+    ".yaml": "config",
+    ".yml": "config",
+    ".json": "config",
+    ".toml": "config",
+    ".xml": "config",
+    ".ini": "config",
+    ".cfg": "config",
+    ".conf": "config",
+    ".properties": "config",
+    ".env": "config",
 }
 
 SKIP_DIRS = {
@@ -72,10 +83,13 @@ def walk(root: Path, language_filter: set[str] | None = None):
 
         language = EXTENSION_TO_LANGUAGE.get(suffix, "generic")
 
-        if language_filter and language not in language_filter and language != "generic":
-            continue
-        if language_filter and language == "generic":
-            # Only include generic files when no filter is active
+        if language_filter:
+            # Always include config files regardless of filter; skip everything else not in filter
+            if language != "config" and language not in language_filter:
+                continue
+
+        # Never yield truly generic (unknown extension) files
+        if language == "generic":
             continue
 
         yield path, language
