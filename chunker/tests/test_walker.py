@@ -43,6 +43,27 @@ def test_walk_language_filter():
     assert all(lang == "python" for lang in languages)
 
 
+def test_walk_config_files_always_included():
+    root = _make_tree({"app.yaml": "host: localhost", "main.py": "x=1", "config.conf": "timeout=30"})
+    # Even when filtering for python only, config files should appear
+    results = list(walk(root, language_filter={"python"}))
+    langs = {lang for _, lang in results}
+    assert "python" in langs
+    assert "config" in langs
+
+
+def test_walk_config_extensions():
+    root = _make_tree({
+        "a.yaml": "", "b.yml": "", "c.json": "{}", "d.toml": "",
+        "e.xml": "", "f.ini": "", "g.cfg": "", "h.conf": "",
+        "i.properties": "", "j.env": "",
+    })
+    results = list(walk(root))
+    langs = [lang for _, lang in results]
+    assert all(lang == "config" for lang in langs)
+    assert len(langs) == 10
+
+
 def test_walk_detects_languages():
     root = _make_tree({"a.py": "x=1", "b.ts": "const x=1", "c.java": "class A{}"})
     lang_map = {str(p.relative_to(root)): lang for p, lang in walk(root)}
