@@ -14,6 +14,7 @@ class Chunk:
     content: str
     chunk_type: str  # "function", "class", "method", "module", "window"
     name: str | None = field(default=None)
+    version: str | None = field(default=None)
     chunk_id: str = field(init=False)
 
     def __post_init__(self) -> None:
@@ -30,5 +31,6 @@ class Chunk:
             "end_line": self.end_line,
             "chunk_type": self.chunk_type,
             "name": self.name,
+            "version": self.version,
             "content": self.content,
         }
