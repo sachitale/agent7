@@ -104,10 +104,10 @@ class ASTChunker(BaseChunker):
     def __init__(self, window_size: int = 60, overlap: int = 15) -> None:
         self._fallback = SlidingWindowChunker(window_size=window_size, overlap=overlap)
 
-    def chunk(self, path: Path, repo: str, file_path: str, language: str) -> list[Chunk]:
+    def chunk(self, path: Path, repo: str, file_path: str, language: str, version: str | None) -> list[Chunk]:
         parser = _get_parser(language)
         if parser is None:
-            return self._fallback.chunk(path, repo, file_path, language)
+            return self._fallback.chunk(path, repo, file_path, language, version)
 
         try:
             source_bytes = path.read_bytes()
@@ -139,6 +139,7 @@ class ASTChunker(BaseChunker):
                 content=content,
                 chunk_type=chunk_type,
                 name=name,
+                version=version,
             ))
 
         if not chunks:
@@ -154,6 +155,7 @@ class ASTChunker(BaseChunker):
                 content=content,
                 chunk_type="module",
                 name=None,
+                version=version,
             ))
 
         return chunks

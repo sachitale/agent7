@@ -11,7 +11,7 @@ class SlidingWindowChunker(BaseChunker):
         self.window_size = window_size
         self.overlap = overlap
 
-    def chunk(self, path: Path, repo: str, file_path: str, language: str) -> list[Chunk]:
+    def chunk(self, path: Path, repo: str, file_path: str, language: str, version: str | None) -> list[Chunk]:
         try:
             text = path.read_text(encoding="utf-8", errors="replace")
         except OSError:
@@ -36,6 +36,7 @@ class SlidingWindowChunker(BaseChunker):
                 content=content,
                 chunk_type="window",
                 name=None,
+                version=version,
             ))
             if end == len(lines):
                 break

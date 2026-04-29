@@ -23,10 +23,11 @@ def cli() -> None:
 @cli.command()
 @click.option("--repo", required=True, help="Git repo URL or local directory path.")
 @click.option("--output", default="chunks.jsonl", show_default=True, help="Output JSONL file.")
+@click.option("--ref", default=None, help="Git tag, branch, or commit to index (remote repos). Auto-detected if omitted.")
 @click.option("--language", "languages", multiple=True, help="Filter to specific language(s). Repeatable.")
 @click.option("--window-size", default=60, show_default=True, help="Lines per sliding window chunk (generic files).")
 @click.option("--overlap", default=15, show_default=True, help="Overlap lines for sliding window chunks.")
-def chunk(repo: str, output: str, languages: tuple[str, ...], window_size: int, overlap: int) -> None:
+def chunk(repo: str, output: str, ref: str | None, languages: tuple[str, ...], window_size: int, overlap: int) -> None:
     """Walk a repo, chunk source files, and write to a JSONL file."""
     lang_filter = set(languages) if languages else None
 
@@ -34,10 +35,13 @@ def chunk(repo: str, output: str, languages: tuple[str, ...], window_size: int, 
 
     console.print(f"[bold]Resolving repo:[/bold] {repo}")
     try:
-        repo_root, repo_label, cleanup = resolve_repo(repo)
+        rd = resolve_repo(repo, ref)
     except (ValueError, RuntimeError) as e:
         console.print(f"[red]Error:[/red] {e}")
         raise SystemExit(1)
+
+    if rd.version:
+        console.print(f"[bold]Version:[/bold] {rd.version}")
 
     ast_chunker = ASTChunker(window_size=window_size, overlap=overlap)
     fallback_chunker = SlidingWindowChunker(window_size=window_size, overlap=overlap)
@@ -49,18 +53,19 @@ def chunk(repo: str, output: str, languages: tuple[str, ...], window_size: int, 
 
     try:
         with console.status("[bold green]Chunking files…"):
-            for file_path, language in walk(repo_root, language_filter=lang_filter):
-                relative = str(file_path.relative_to(repo_root))
+            for file_path, language in walk(rd.path, language_filter=lang_filter):
+                relative = str(file_path.relative_to(rd.path))
                 if language in supported_languages:
-                    file_chunks = ast_chunker.chunk(file_path, repo_label, relative, language)
+                    file_chunks = ast_chunker.chunk(file_path, rd.url, relative, language, rd.version)
                 else:
-                    file_chunks = fallback_chunker.chunk(file_path, repo_label, relative, language)
+                    file_chunks = fallback_chunker.chunk(file_path, rd.url, relative, language, rd.version)
                 all_chunks.extend(file_chunks)
                 files_seen += 1
 
         total, lang_counts = write_jsonl(all_chunks, output_path)
     finally:
-        cleanup()
+        if rd.cleanup_fn:
+            rd.cleanup_fn()
 
     console.print(f"\n[green]Done.[/green] Wrote [bold]{total}[/bold] chunks from [bold]{files_seen}[/bold] files → [bold]{output_path}[/bold]\n")
 
